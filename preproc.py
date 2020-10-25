@@ -102,26 +102,24 @@ class save_features():
 
         for _,obj in enumerate([self.train_ds, self.dev_ds, self.test_ds]):
             for dt in obj:
-                if dt['id'] == 37408:
-                    # for face
-                    fc = self.face_obj.dine(str(dt['image']))
-                    with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
-                        pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+                # for face
+                fc = self.face_obj.dine(str(dt['image']))
+                with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
+                    pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
 
-                    del fc
-                    del f
+                del fc
+                del f
 
-                    # for text
-                    fc = self.rob.get_features(dt['text'])
-                    with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
-                        pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
-                    
-                    del fc
-                    del f
-                    break
+                # for text
+                fc = self.rob.get_features(dt['text'])
+                with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
+                    pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+                
+                del fc
+                del f
+            
             # progress(_, len(obj), 'dataset no. '+str(_))
             gc.collect()
-            break
 
 
 

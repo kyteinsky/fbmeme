@@ -23,6 +23,7 @@ class face_dinner():
 
         for ann in annotations:
             bb = ann['bbox']
+            if bb == []: break
             # 1 - y1
             # 3 - y2
             # 0 - x1
@@ -36,18 +37,20 @@ class face_dinner():
             faces.append(facex)
             # cv2.imwrite(f'test{i}.jpg', facex)
             # i = i + 1
-
-        fdata = self.deepfc(faces)
+        
         zero, zero_str, zero_zero = [], [], [0]*4*5
-        # rdata = self.recog(faces)
 
-        for i in fdata:
-            for _,j in enumerate(i):
-                if _ == 1: zero_str.append(j)
-                else: zero.append(j)
+        if not faces == []:
+            fdata = self.deepfc(faces)
+            # rdata = self.recog(faces)
 
-        zero_zero[:len(zero)] = zero # padding with zero
-        zero_str = [word[0] for word in groupby(zero_str)] # removing duplicates
+            for i in fdata:
+                for _,j in enumerate(i):
+                    if _ == 1: zero_str.append(j)
+                    else: zero.append(j)
+
+            zero_zero[:len(zero)] = zero # padding with zero
+            zero_str = [word[0] for word in groupby(zero_str)] # removing duplicates
 
         return zero_zero, zero_str # [int_features, str_feature]
 
