@@ -8,7 +8,7 @@ from tqdm import tqdm
 import gc
 import sys
 
-from face_dinner import face_dinner
+# from face_dinner import face_dinner
 from robert import roberta_enc
 
 class HM_dataset(torch.utils.data.Dataset):
