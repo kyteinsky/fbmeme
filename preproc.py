@@ -5,6 +5,8 @@ import pandas as pd
 from pathlib import Path
 import pickle
 from tqdm import tqdm
+import gc
+import sys
 
 from face_dinner import face_dinner
 from robert import roberta_enc
@@ -100,30 +102,38 @@ class save_features():
 
         for _,obj in enumerate([self.train_ds, self.dev_ds, self.test_ds]):
             for dt in obj:
-                # for face
-                fc = self.face_obj.dine(str(dt['image']))
-                with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
-                    pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+                if dt['id'] == 37408:
+                    # for face
+                    fc = self.face_obj.dine(str(dt['image']))
+                    with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
+                        pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
 
-                # for text
-                fc = self.rob.get_features(dt['text'])
-                with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
-                    pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
-            progress(_, len(obj), 'dataset no. '+str(_))
+                    del fc
+                    del f
+
+                    # for text
+                    fc = self.rob.get_features(dt['text'])
+                    with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
+                        pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+                    
+                    del fc
+                    del f
+                    break
+            # progress(_, len(obj), 'dataset no. '+str(_))
+            gc.collect()
+            break
 
 
-import sys
 
+# def progress(count, total, status=''):
+#     bar_len = 60
+#     filled_len = int(round(bar_len * count / float(total)))
 
-def progress(count, total, status=''):
-    bar_len = 60
-    filled_len = int(round(bar_len * count / float(total)))
+#     percents = round(100.0 * count / float(total), 1)
+#     bar = '=' * filled_len + '-' * (bar_len - filled_len)
 
-    percents = round(100.0 * count / float(total), 1)
-    bar = '=' * filled_len + '-' * (bar_len - filled_len)
-
-    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
-    sys.stdout.flush()
+#     sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+#     sys.stdout.flush()
 
 
 if __name__ == '__main__':
