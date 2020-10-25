@@ -4,6 +4,7 @@ import pandas as pd
 # from PIL import Image
 from pathlib import Path
 import pickle
+from tqdm import tqdm
 
 from face_dinner import face_dinner
 from robert import roberta_enc
@@ -108,6 +109,21 @@ class save_features():
                 fc = self.rob.get_features(dt['text'])
                 with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
                     pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+            progress(_, len(obj), 'dataset no. '+str(_))
+
+
+import sys
+
+
+def progress(count, total, status=''):
+    bar_len = 60
+    filled_len = int(round(bar_len * count / float(total)))
+
+    percents = round(100.0 * count / float(total), 1)
+    bar = '=' * filled_len + '-' * (bar_len - filled_len)
+
+    sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
+    sys.stdout.flush()
 
 
 if __name__ == '__main__':
