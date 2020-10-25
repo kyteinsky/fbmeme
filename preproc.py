@@ -127,10 +127,11 @@ if __name__ == '__main__':
         data_dir/'annotations/test_seen.jsonl',
         data_dir
     )
-'''    dev_ds = HM_dataset(
-        data_dir/'annotations/dev_seen.jsonl',
-        data_dir
-    )'''
 
     save(face_obj=face_obj, rob=rob, ds=test_ds)
     save(face_obj=face_obj, rob=rob, ds=train_ds)
+
+    '''dev_ds = HM_dataset(
+        data_dir/'annotations/dev_seen.jsonl',
+        data_dir
+    )'''
