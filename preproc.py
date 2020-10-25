@@ -67,8 +67,8 @@ class HM_dataset(torch.utils.data.Dataset):
 class save_features():
     def __init__(self, data_folder='data'):
 
-        # self.face_obj = face_dinner()
-        # self.rob = roberta_enc()
+        self.face_obj = face_dinner()
+        self.rob = roberta_enc()
 
         data_dir = Path.cwd() / data_folder
 
@@ -103,23 +103,19 @@ class save_features():
         for _,obj in enumerate([self.train_ds, self.dev_ds, self.test_ds]):
             for dt in obj:
                 # for face
-                face_obj = face_dinner()
-                fc = face_obj.dine(str(dt['image']))
+                fc = self.face_obj.dine(str(dt['image']))
                 with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
                     pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
 
                 del fc
                 del f
-                del face_obj
 
                 # for text
-                rob = roberta_enc()
-                fc = rob.get_features(dt['text'])
+                fc = self.rob.get_features(dt['text'])
                 with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
                     pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
                 
                 del dt
-                del rob
                 
                 gc.collect()
             
