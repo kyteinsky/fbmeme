@@ -64,62 +64,39 @@ class HM_dataset(torch.utils.data.Dataset):
 
         return sample
 
-class save_features():
-    def __init__(self, data_folder='data'):
 
-        self.face_obj = face_dinner()
-        self.rob = roberta_enc()
+def save(face_obj, rob, ds, ffolder='features/'):
+    # mkdir batch_size in `ffolder`
+    # mkdir face/ text/ in batch_size/
 
-        data_dir = Path.cwd() / data_folder
+    if not os.path.isdir(ffolder): os.mkdir(ffolder)
 
-        self.train_ds = HM_dataset(
-            data_dir/'annotations/train.jsonl',
-            data_dir
-        )
-        self.test_ds = HM_dataset(
-            data_dir/'annotations/test_seen.jsonl',
-            data_dir
-        )
-        self.dev_ds = HM_dataset(
-            data_dir/'annotations/dev_seen.jsonl',
-            data_dir
-        )
+    path_var = dict()
 
-    def save(self, ffolder='features/'):
-        # mkdir batch_size in `ffolder`
-        # mkdir face/ text/ in batch_size/
-
-        if not os.path.isdir(ffolder): os.mkdir(ffolder)
-
-        path_var = dict()
-
-        for i in ['face', 'text']:
-            tmp_path_var = os.path.join(ffolder, i)
-            if not os.path.isdir(tmp_path_var):
-                os.makedirs(tmp_path_var)
-            path_var[i] = tmp_path_var
+    for i in ['face', 'text']:
+        tmp_path_var = os.path.join(ffolder, i)
+        if not os.path.isdir(tmp_path_var):
+            os.makedirs(tmp_path_var)
+        path_var[i] = tmp_path_var
 
 
-        for _,obj in enumerate([self.train_ds, self.dev_ds, self.test_ds]):
-            for dt in obj:
-                # for face
-                fc = self.face_obj.dine(str(dt['image']))
-                with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
-                    pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+    for dt in ds:
+        # for face
+        # fc = face_obj.dine(str(dt['image']))
+        # with open(str(Path(path_var['face'])) +'/'+ str(dt['id']), 'wb') as f:
+        #     pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
 
-                del fc
-                del f
+        # del fc
+        # del f
 
-                # for text
-                fc = self.rob.get_features(dt['text'])
-                with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
-                    pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
-                
-                del dt
-                
-                gc.collect()
-            
-            # progress(_, len(obj), 'dataset no. '+str(_))
+        # for text
+        fc = rob.get_features(dt['text'])
+        with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
+            pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
+        
+        gc.collect()
+    
+    # progress(_, len(obj), 'dataset no. '+str(_))
 
 
 
@@ -136,5 +113,23 @@ class save_features():
 
 
 if __name__ == '__main__':
-    features = save_features()
-    features.save()
+    
+    face_obj = face_dinner()
+    rob = roberta_enc()
+
+    data_dir = Path.cwd() / 'data'
+
+    # train_ds = HM_dataset(
+    #     data_dir/'annotations/train.jsonl',
+    #     data_dir
+    # )
+    # test_ds = HM_dataset(
+    #     data_dir/'annotations/test_seen.jsonl',
+    #     data_dir
+    # )
+    dev_ds = HM_dataset(
+        data_dir/'annotations/dev_seen.jsonl',
+        data_dir
+    )
+
+    save(face_obj=face_obj, rob=rob, ds=dev_ds)
