@@ -119,17 +119,20 @@ if __name__ == '__main__':
 
     data_dir = Path.cwd() / 'data'
 
-    # train_ds = HM_dataset(
-    #     data_dir/'annotations/train.jsonl',
-    #     data_dir
-    # )
-    # test_ds = HM_dataset(
-    #     data_dir/'annotations/test_seen.jsonl',
-    #     data_dir
-    # )
-    dev_ds = HM_dataset(
-        data_dir/'annotations/dev_seen.jsonl',
+    train_ds = HM_dataset(
+        data_dir/'annotations/train.jsonl',
         data_dir
     )
+    test_ds = HM_dataset(
+        data_dir/'annotations/test_seen.jsonl',
+        data_dir
+    )
+'''    dev_ds = HM_dataset(
+        data_dir/'annotations/dev_seen.jsonl',
+        data_dir
+    )'''
 
-    save(face_obj=face_obj, rob=rob, ds=dev_ds)
+    save(face_obj=face_obj, rob=rob, ds=test_ds)
+    save(face_obj=face_obj, rob=rob, ds=train_ds)
+
+

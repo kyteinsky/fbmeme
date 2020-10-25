@@ -9,6 +9,7 @@ class roberta_enc():
         spell: Use spell checker
         """
         self.roberta = RobertaModel.from_pretrained(model_path, checkpoint_file='model.pt')
+        #self.roberta = torch.hub.load('pytorch/fairseq', 'roberta.large')
         self.roberta.eval()
         self.sp = spelling()
 
