@@ -134,5 +134,3 @@ if __name__ == '__main__':
 
     save(face_obj=face_obj, rob=rob, ds=test_ds)
     save(face_obj=face_obj, rob=rob, ds=train_ds)
-
-
