@@ -114,9 +114,6 @@ class save_features():
                 fc = self.rob.get_features(dt['text'])
                 with open(str(Path(path_var['text'])) +'/'+ str(dt['id']), 'wb') as f:
                     pickle.dump(fc, f, pickle.HIGHEST_PROTOCOL)
-                
-                del fc
-                del f
             
             # progress(_, len(obj), 'dataset no. '+str(_))
             gc.collect()
