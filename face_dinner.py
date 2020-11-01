@@ -37,7 +37,7 @@ class face_dinner():
             faces.append(facex)
             # cv2.imwrite(f'test{i}.jpg', facex)
             # i = i + 1
-        
+
         zero, zero_str, zero_zero = [], [], [0]*4*5
 
         if not faces == []:

@@ -113,7 +113,7 @@ def save(face_obj, rob, ds, ffolder='features/'):
 
 
 if __name__ == '__main__':
-    
+
     # face_obj = face_dinner()
     rob = roberta_enc()
 
